@@ -1,319 +1,311 @@
 {% extends 'base.html' %}
 {% load static %}
-{%block content%}
-<div class="container-fluid py-5" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);">
-  <div class="container">
-    <!-- Header -->
-    <div class="text-center mb-5">
-      <img src="{% static 'images/logo1.png'%}" alt="Logo" style="height: 80px; margin-bottom: 20px;">
-      <h1 class="display-5 fw-bold" style="color: #333;">Analysis Results</h1>
-      <p class="lead text-muted">AI-powered deepfake detection analysis</p>
-    </div>
 
-    <!-- Frames Split Section -->
-    <div class="mb-5">
-      <div class="section-header mb-4">
-        <h2 class="section-title">
-          <i class="fas fa-images" style="color: #667eea;"></i> Video Frames Analysis
-        </h2>
-        <p class="text-muted">6 key frames extracted and analyzed from your video</p>
-      </div>
-      {% if preprocessed_images %}
-        <div class="row g-4">
-          {% for each_image in preprocessed_images %}
-            <div class="col-lg-4 col-md-6 col-12">
-              <div class="frame-card rounded-4 overflow-hidden shadow-sm hover-lift">
-                <img src="{%static each_image%}" class="w-100" alt="Frame" style="height: 300px; object-fit: cover; object-position: center;">
-                <div class="p-3 bg-light text-center">
-                  <span class="badge bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)">Frame {{ forloop.counter }}</span>
-                </div>
-              </div>
+{% block title %}DRISHTI Analysis{% endblock %}
+
+{% block content %}
+<section class="app-shell py-4 py-lg-5">
+    <div class="panel p-4 p-lg-5 mb-4">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-8">
+                <div class="eyebrow mb-3"><i class="fas fa-triangle-exclamation"></i> Analyst result</div>
+                <h1 style="font-size: clamp(2.1rem, 4vw, 4rem); margin-bottom: 14px;">{{ last_result.alert_title }}</h1>
+                <p class="muted mb-0" style="max-width: 860px;">{{ last_result.alert_summary }}</p>
             </div>
-          {% endfor %}
-        </div>
-      {% else %}
-        <div class="alert alert-info rounded-4"><i class="fas fa-info-circle me-2"></i>No frames available</div>
-      {% endif %}
-    </div>
-
-    <!-- Face Cropped Frames Section -->
-    <div class="mb-5">
-      <div class="section-header mb-4">
-        <h2 class="section-title">
-          <i class="fas fa-face-grin" style="color: #764ba2;"></i> Face Detection Analysis
-        </h2>
-        <p class="text-muted">Detected and cropped face regions from each frame</p>
-      </div>
-      {% if faces_cropped_images %}
-        <div class="row g-4">
-          {% for each_image in faces_cropped_images %}
-            <div class="col-lg-4 col-md-6 col-12">
-              <div class="frame-card rounded-4 overflow-hidden shadow-sm hover-lift" style="border: 3px solid #667eea;">
-                <img src="{%static each_image%}" class="w-100" alt="Face Crop" style="height: 300px; object-fit: cover; object-position: center;">
-                <div class="p-3 bg-light text-center">
-                  <span class="badge bg-success">Face {{ forloop.counter }}</span>
+            <div class="col-lg-4">
+                <div class="panel-soft p-4">
+                    <div class="muted mb-2">Operator note</div>
+                    <p class="mb-0">{{ last_result.analyst_note }}</p>
                 </div>
-              </div>
             </div>
-          {% endfor %}
         </div>
-      {% else %}
-        <div class="alert alert-info rounded-4"><i class="fas fa-info-circle me-2"></i>No cropped faces available</div>
-      {% endif %}
     </div>
 
-    <!-- Video Preview Section -->
-    <div class="mb-5">
-      <div class="section-header mb-4">
-        <h2 class="section-title">
-          <i class="fas fa-film" style="color: #667eea;"></i> Video Preview
-        </h2>
-        <p class="text-muted">Play your uploaded video with face detection overlay</p>
-      </div>
-      {% if original_video %}
-        <div class="video-container rounded-4 overflow-hidden shadow-lg" style="background: #000;">
-          <video width="100%" height="500" id="predict-media" controls controlsList="nodownload" style="background: #000; display: block; max-width: 100%;">
-            <source src="/media/{{ original_video }}" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      {% else %}
-        <div class="alert alert-warning rounded-4"><i class="fas fa-exclamation-triangle me-2"></i>Video not available</div>
-      {% endif %}
-    </div>
-
-    <!-- Prediction Result Section -->
-    <div class="mb-5">
-      <div class="result-card rounded-4 overflow-hidden shadow-lg" style="border-left: 8px solid {% if output == 'REAL' %}#28a745{% else %}#dc3545{% endif %};">
-        <div class="card-body p-5">
-          <h2 class="mb-5 text-center fw-bold" style="color: #333;">
-            <i class="fas fa-shield-alt me-3"></i>AI Deepfake Detection Result
-          </h2>
-          
-          <div class="row align-items-center">
-            <!-- Result Indicator -->
-            <div class="col-lg-6 text-center mb-4 mb-lg-0">
-              {% if output == "REAL" %}
-                <div class="result-badge rounded-4 p-5" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white;">
-                  <div class="display-1 fw-bold mb-3" style="line-height: 1;">✓</div>
-                  <h2 class="h1 fw-bold mb-3">REAL VIDEO</h2>
-                  <p class="lead mb-0">This video appears to be genuine and not AI-generated</p>
+    <div class="row g-4 mb-4">
+        <div class="col-md-6 col-xl-3">
+            <div class="metric-card h-100">
+                <div class="muted mb-2">Threat verdict</div>
+                <div class="metric-value {% if output == 'SYNTHETIC' %}tone-critical{% else %}tone-low{% endif %}">{{ output }}</div>
+                <div class="mt-2">
+                    <span class="status-pill {% if output == 'SYNTHETIC' %}critical{% else %}low{% endif %}">
+                        <i class="fas {% if output == 'SYNTHETIC' %}fa-bell{% else %}fa-circle-check{% endif %}"></i>
+                        {% if output == 'SYNTHETIC' %}Escalate{% else %}Monitor{% endif %}
+                    </span>
                 </div>
-              {% else %}
-                <div class="result-badge rounded-4 p-5" style="background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%); color: white;">
-                  <div class="display-1 fw-bold mb-3" style="line-height: 1;">⚠</div>
-                  <h2 class="h1 fw-bold mb-3">DEEPFAKE DETECTED</h2>
-                  <p class="lead mb-0">This video appears to be AI-generated or artificially manipulated</p>
-                </div>
-              {% endif %}
             </div>
-
-            <!-- Confidence Meter -->
-            <div class="col-lg-6">
-              <div class="ps-lg-5">
-                <h4 class="fw-bold mb-4" style="color: #333;">
-                  <i class="fas fa-chart-pie me-2" style="color: {% if output == 'REAL' %}#28a745{% else %}#dc3545{% endif %};"></i>Detection Confidence
-                </h4>
-                
-                <div class="mb-4">
-                  <div class="d-flex justify-content-between mb-3">
-                    <span class="fw-bold" style="color: #555;">Confidence Score</span>
-                    <span class="h4 mb-0 fw-bold" style="color: {% if output == 'REAL' %}#28a745{% else %}#dc3545{% endif %};">{{confidence}}%</span>
-                  </div>
-                  <div class="progress rounded-3" style="height: 45px; background: #e9ecef;">
-                    <div class="progress-bar {% if output == 'REAL' %}bg-success{% else %}bg-danger{% endif %} rounded-3" 
-                         role="progressbar" 
-                         style="width: {{confidence}}%; font-size: 1.1em; font-weight: bold; line-height: 45px;" 
-                         aria-valuenow="{{confidence}}" 
-                         aria-valuemin="0" 
-                         aria-valuemax="100">
-                      {{confidence}}%
-                    </div>
-                  </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="metric-card h-100">
+                <div class="muted mb-2">Confidence</div>
+                <div class="metric-value">{{ confidence }}%</div>
+                <div class="muted mt-2">Mode: {{ last_result.mode|upper }}</div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="metric-card h-100">
+                <div class="muted mb-2">Weaponisation</div>
+                <div class="metric-value tone-elevated">{{ last_result.weaponization.score }}%</div>
+                <div class="mt-2">
+                    <span class="status-pill {{ last_result.weaponization.tone }}">{{ last_result.weaponization.label }}</span>
                 </div>
-
-                <div class="alert {% if output == 'REAL' %}alert-success{% else %}alert-danger{% endif %} rounded-3 mb-0" style="border: none;">
-                  <h6 class="mb-2 fw-bold">
-                    <i class="fas fa-clipboard-list me-2"></i>Analysis Summary
-                  </h6>
-                  <p class="mb-0" style="font-size: 0.95em;">
-                    {% if output == "REAL" %}
-                    The video exhibits natural frame characteristics and temporal consistency typical of authentic footage. No significant AI generation artifacts detected.
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="metric-card h-100">
+                <div class="muted mb-2">Primary match</div>
+                <div class="metric-value" style="font-size: 1.6rem;">
+                    {% if last_result.impersonation_matches %}
+                    {{ last_result.impersonation_matches.0.subject }}
                     {% else %}
-                    The video exhibits frame artifacts, smoothness anomalies, and other characteristics consistent with AI generation or deepfake techniques. Exercise caution with this content.
+                    None
                     {% endif %}
-                  </p>
+                </div>
+                <div class="muted mt-2">
+                    {% if last_result.impersonation_matches %}
+                    {{ last_result.impersonation_matches.0.score }}% match risk
+                    {% else %}
+                    Watchlist clean
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-xl-7">
+            <div class="panel p-4 p-lg-5 h-100">
+                <div class="section-title">
+                    <div>
+                        <h2>Fused signal stack</h2>
+                        <p class="muted mb-0">Every module contributes evidence to the final DRISHTI verdict.</p>
+                    </div>
                 </div>
 
-                {% if is_demo %}
-                  <div class="alert alert-warning rounded-3 mt-3 mb-0" style="border: none;">
-                    <i class="fas fa-lightbulb me-2"></i>
-                    <strong>Demo Mode:</strong> Using frame analysis algorithm. For production, install ML model for higher accuracy.
-                  </div>
+                {% for signal in last_result.signals %}
+                <div class="panel-soft p-3 p-lg-4 mb-3">
+                    <div style="display: flex; justify-content: space-between; gap: 16px; align-items: start; margin-bottom: 10px;">
+                        <div>
+                            <h3 style="font-size: 1.15rem; margin-bottom: 6px;">{{ signal.name }}</h3>
+                            <p class="muted mb-1">{{ signal.summary }}</p>
+                            <small class="muted">{{ signal.evidence }}</small>
+                        </div>
+                        <div style="text-align: right; min-width: 110px;">
+                            <div class="metric-value" style="font-size: 1.55rem;">{{ signal.score }}%</div>
+                            <span class="status-pill {{ signal.tone }}">{{ signal.label }}</span>
+                        </div>
+                    </div>
+                    <div class="progress" style="height: 10px; background: rgba(255,255,255,0.08);">
+                        <div class="progress-bar" role="progressbar" style="width: {{ signal.score }}%; background: linear-gradient(90deg, #d8b15a 0%, #ff7d7d 100%);"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-xl-5">
+            <div class="panel p-4 p-lg-5 mb-4">
+                <div class="section-title">
+                    <div>
+                        <h2>Watchlist matches</h2>
+                        <p class="muted mb-0">India-specific persona matching for sensitive figures and adversarial channels.</p>
+                    </div>
+                </div>
+                {% for match in last_result.impersonation_matches %}
+                <div class="panel-soft p-3 mb-3">
+                    <div style="display: flex; justify-content: space-between; gap: 12px; align-items: start;">
+                        <div>
+                            <strong>{{ match.subject }}</strong>
+                            <div class="muted">{{ match.role }}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="metric-value" style="font-size: 1.4rem;">{{ match.score }}%</div>
+                            <span class="status-pill {{ match.tone }}">{{ match.label }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="panel p-4 p-lg-5">
+                <div class="section-title">
+                    <div>
+                        <h2>Weaponisation predictor</h2>
+                        <p class="muted mb-0">{{ last_result.weaponization.assessment }}</p>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-4">
+                        <div class="metric-card h-100">
+                            <div class="muted mb-1">Reach</div>
+                            <div class="metric-value" style="font-size: 1.6rem;">{{ last_result.weaponization.reach_score }}%</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="metric-card h-100">
+                            <div class="muted mb-1">Emotion</div>
+                            <div class="metric-value" style="font-size: 1.6rem;">{{ last_result.weaponization.emotion_score }}%</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="metric-card h-100">
+                            <div class="muted mb-1">Timing</div>
+                            <div class="metric-value" style="font-size: 1.6rem;">{{ last_result.weaponization.timing_score }}%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-xl-7">
+            <div class="panel p-4 p-lg-5 h-100">
+                <div class="section-title">
+                    <div>
+                        <h2>Clip and frame evidence</h2>
+                        <p class="muted mb-0">Operator-friendly visual inspection for side-by-side review.</p>
+                    </div>
+                </div>
+
+                {% if original_video %}
+                <div class="ratio ratio-16x9 rounded-4 overflow-hidden mb-4" style="background: #000; border: 1px solid rgba(255,255,255,0.08);">
+                    <video width="100%" id="predict-media" controls controlsList="nodownload" style="background: #000; display: block; max-width: 100%;">
+                        <source src="/media/{{ original_video }}" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
                 {% endif %}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Actions: Report & Feedback Navigation -->
-    <div class="mb-5">
-      <div class="row g-4 align-items-center">
-        <div class="col-lg-4">
-          <div class="card shadow-sm rounded-4 h-100 border-0">
-            <div class="card-body text-center p-5" style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);">
-              <div class="mb-3" style="font-size: 2.5em; color: #667eea;">
-                <i class="fas fa-file-download"></i>
-              </div>
-              <h5 class="fw-bold mb-3">Download Report</h5>
-              <p class="text-muted mb-3">Get a formatted text report of this analysis for sharing or record-keeping.</p>
-              <a class="btn btn-primary w-100 rounded-3" href="{% url 'ml_app:report_page' %}">
-                <i class="fas fa-arrow-right me-2"></i>View Report
-              </a>
+                <div class="row g-3">
+                    {% for each_image in analysis.preprocessed_images %}
+                    <div class="col-md-4">
+                        <div class="panel-soft overflow-hidden h-100">
+                            <img src="{% static each_image %}" class="w-100" alt="Frame {{ forloop.counter }}" style="height: 190px; object-fit: cover;">
+                            <div class="p-3">
+                                <div class="muted">Frame {{ forloop.counter }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-          </div>
         </div>
 
-        <div class="col-lg-4">
-          <div class="card shadow-sm rounded-4 h-100 border-0">
-            <div class="card-body text-center p-5" style="background: linear-gradient(135deg, #764ba215 0%, #667eea15 100%);">
-              <div class="mb-3" style="font-size: 2.5em; color: #764ba2;">
-                <i class="fas fa-comment-dots"></i>
-              </div>
-              <h5 class="fw-bold mb-3">Provide Feedback</h5>
-              <p class="text-muted mb-3">Help improve our detection by sharing if this verdict was accurate and any observations.</p>
-              <a class="btn btn-outline-primary w-100 rounded-3" href="{% url 'ml_app:feedback_page' %}">
-                <i class="fas fa-arrow-right me-2"></i>Give Feedback
-              </a>
+        <div class="col-xl-5">
+            <div class="panel p-4 p-lg-5 mb-4">
+                <div class="section-title">
+                    <div>
+                        <h2>Analyst actions</h2>
+                        <p class="muted mb-0">Next steps that a PIB-style operator can take immediately.</p>
+                    </div>
+                </div>
+                {% for action in last_result.recommended_actions %}
+                <div class="panel-soft p-3 mb-3">
+                    <div style="display: flex; gap: 12px; align-items: start;">
+                        <span class="status-pill elevated" style="min-width: 42px; justify-content: center;"><i class="fas fa-arrow-right"></i></span>
+                        <div>{{ action }}</div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-          </div>
+
+            <div class="panel p-4 p-lg-5">
+                <div class="section-title">
+                    <div>
+                        <h2>Pipeline timeline</h2>
+                        <p class="muted mb-0">From ingest to fact-check generation.</p>
+                    </div>
+                </div>
+                {% for item in last_result.timeline %}
+                <div class="panel-soft p-3 mb-3">
+                    <strong>{{ item.step }}</strong>
+                    <div class="muted">{{ item.detail }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-xl-6">
+            <div class="panel p-4 p-lg-5 h-100">
+                <div class="section-title">
+                    <div>
+                        <h2>Face region extraction</h2>
+                        <p class="muted mb-0">Quick visual crops for apparent identity-bearing regions.</p>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    {% for each_image in analysis.faces_cropped_images %}
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="panel-soft overflow-hidden h-100">
+                            <img src="{% static each_image %}" class="w-100" alt="Cropped face {{ forloop.counter }}" style="height: 180px; object-fit: cover;">
+                            <div class="p-3 muted">Candidate region {{ forloop.counter }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
 
-        <div class="col-lg-4">
-          <div class="card shadow-sm rounded-4 h-100 border-0">
-            <div class="card-body text-center p-5" style="background: linear-gradient(135deg, #28a74515 0%, #764ba215 100%);">
-              <div class="mb-3" style="font-size: 2.5em; color: #28a745;">
-                <i class="fas fa-redo"></i>
-              </div>
-              <h5 class="fw-bold mb-3">Analyze Another</h5>
-              <p class="text-muted mb-3">Upload a new video to analyze or test the detector with different content.</p>
-              <a class="btn btn-outline-success w-100 rounded-3" href="{% url 'ml_app:home' %}">
-                <i class="fas fa-arrow-right me-2"></i>Start New
-              </a>
+        <div class="col-xl-6">
+            <div class="panel p-4 p-lg-5 h-100">
+                <div class="section-title">
+                    <div>
+                        <h2>Telemetry and event context</h2>
+                        <p class="muted mb-0">Low-level metadata fused with crisis-timing awareness.</p>
+                    </div>
+                </div>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <div class="metric-card h-100">
+                            <div class="muted mb-1">Frames</div>
+                            <div class="metric-value" style="font-size: 1.6rem;">{{ last_result.telemetry.frames_sampled }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="metric-card h-100">
+                            <div class="muted mb-1">FPS</div>
+                            <div class="metric-value" style="font-size: 1.6rem;">{{ last_result.telemetry.fps }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="metric-card h-100">
+                            <div class="muted mb-1">Container</div>
+                            <div class="metric-value" style="font-size: 1.6rem;">{{ last_result.telemetry.container }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                {% for event in analysis.event_watchlist %}
+                <div class="panel-soft p-3 mb-3">
+                    <div style="display: flex; justify-content: space-between; gap: 12px; align-items: start;">
+                        <div>
+                            <strong>{{ event.title }}</strong>
+                            <div class="muted">{{ event.detail }}</div>
+                        </div>
+                        <span class="status-pill {% if forloop.first %}critical{% else %}elevated{% endif %}">{{ event.window }}</span>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-          </div>
         </div>
-      </div>
     </div>
 
-    <!-- Stats Link -->
-    <div class="text-center mb-5">
-      <a href="{% url 'ml_app:stats_page' %}" class="btn btn-outline-info rounded-3">
-        <i class="fas fa-chart-bar me-2"></i>View Detection Stats & Dashboard
-      </a>
+    <div class="panel p-4 p-lg-5">
+        <div class="row g-3 align-items-center">
+            <div class="col-lg-7">
+                <h2 style="margin-bottom: 10px;">One-click operator outputs</h2>
+                <p class="muted mb-0">Turn this assessment into a shareable report or feed another suspicious clip into the queue.</p>
+            </div>
+            <div class="col-lg-5">
+                <div style="display: flex; flex-wrap: wrap; justify-content: flex-lg-end; gap: 12px;">
+                    <a class="btn btn-drishti" href="{% url 'ml_app:report_page' %}"><i class="fas fa-file-lines me-2"></i>Open report</a>
+                    <a class="btn btn-ghost" href="{% url 'ml_app:feedback_page' %}"><i class="fas fa-comment-dots me-2"></i>Analyst feedback</a>
+                    <a class="btn btn-ghost" href="{% url 'ml_app:home' %}"><i class="fas fa-rotate me-2"></i>Analyze another</a>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <!-- Back Button -->
-    <div class="text-center mb-5">
-      <a href="{% url 'ml_app:home' %}" class="btn btn-lg rounded-3 px-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
-        <i class="fas fa-arrow-left me-2"></i>Upload New Video
-      </a>
-    </div>
-  </div>
-</div>
-
-<style>
-  .section-header {
-    border-bottom: 3px solid #667eea;
-    padding-bottom: 15px;
-  }
-  .section-title {
-    color: #333;
-    font-weight: bold;
-    font-size: 1.8rem;
-  }
-  .frame-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background: white;
-  }
-  .hover-lift:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2) !important;
-  }
-  .result-badge {
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease;
-  }
-  .result-badge:hover {
-    transform: scale(1.02);
-  }
-  .result-card {
-    background: white;
-  }
-  .progress-bar {
-    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .alert {
-    transition: all 0.3s ease;
-  }
-</style>
-
-{%endblock%}
-{%block js_cripts%}
-<script src="{%static 'js/face-api.min.js'%}"></script>
-<script>
-  $(document).ready(function () {
-    const video = document.getElementById("predict-media");
-    if (!video) return;
-
-    Promise.all([
-      faceapi.nets.ssdMobilenetv1.loadFromUri('/static/json'),
-      faceapi.nets.tinyFaceDetector.loadFromUri("/static/json")
-    ]).catch(err => console.log("Face detection models not loaded:", err));
-
-    var detectionTimeout;
-    video.addEventListener("playing", () => {
-      try {
-        var canvas;
-        if ($('canvas').length < 1) {
-          canvas = faceapi.createCanvasFromMedia(video);
-          canvas.style.top = video.offsetTop + "px";
-          canvas.style.left = video.offsetLeft + "px";
-          canvas.style.position = "absolute";
-          canvas.style.zIndex = "10";
-          document.body.append(canvas);
-        }
-        const displaySize = { width: video.width, height: video.height };
-        faceapi.matchDimensions(canvas, displaySize);
-
-        detectionTimeout = setInterval(async () => {
-          const detections = await faceapi.detectAllFaces(video);
-          const resizedDetections = faceapi.resizeResults(detections, displaySize);
-          canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-          
-          resizedDetections.forEach((result, i) => {
-            var output = '{{output}}';
-            var confidence = '{{confidence}}';
-            var drawOptions = {label: output + "  " + confidence + "%"};
-            if (output == 'REAL'){
-              drawOptions["boxColor"] = "#28a745";
-            } else if (output == 'FAKE'){
-              drawOptions["boxColor"] = "#dc3545";
-            }
-            const drawBox = new faceapi.draw.DrawBox(result.box, drawOptions);
-            drawBox.draw(canvas);
-          });
-        }, 100);
-      } catch(e) {
-        console.log("Face detection error:", e);
-      }
-    });
-
-    video.addEventListener("paused", () => {
-      clearTimeout(detectionTimeout);
-    });
-  })
-</script>
-{%endblock%}
+</section>
+{% endblock %}

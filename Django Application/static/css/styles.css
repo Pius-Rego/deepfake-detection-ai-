@@ -1,105 +1,55 @@
 body {
     height: 100%;
 }
-.bg {
-    /* The image used */
-    background-image: url("/static/images/background1.png");
-  
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-  
-    /* Center and scale the image nicely */
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
 
-
-}
-
-section{
-    padding-top: 60px;
-}
-
-.width-300{
-    width: 300px;
-    margin: auto;
-    padding: 20px;
-    box-shadow: 0 0px 9px 2px #ccc;
-}
-
-.width-400{
-    width: 400px;
-    margin: auto;
-    padding: 20px;
-    margin-top: 80px;
-    margin-bottom: 150px;
-    box-shadow: 0 0px 9px 2px #ccc;
-}
-
-.width-500{
-    width: 500px;
-    margin: auto;
-    padding: 20px;
-    box-shadow: 0 0px 9px 2px #ccc;
-}
-
-#videos{
+#videos {
     display: none;
 }
 
-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
+.form-control,
+.input-group-text,
+textarea.form-control {
+    background: rgba(255, 255, 255, 0.03);
+    color: #edf7f2;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.preprocess {
-    padding-right: 20px;
-    padding-bottom: 50px;
+.form-control:focus,
+textarea.form-control:focus {
+    color: #edf7f2;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(216, 177, 90, 0.35);
+    box-shadow: 0 0 0 0.25rem rgba(216, 177, 90, 0.12);
 }
 
-#preprocessed_images {
-  white-space: nowrap;
-  width: auto;
-  height: 250px;
-  padding: 20px;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  box-shadow: 0 0px 9px 2px #ccc;
+.form-control::file-selector-button {
+    background: rgba(216, 177, 90, 0.14);
+    color: #f2d187;
+    border: none;
 }
 
-#faces_images {
-    white-space: nowrap;
-    width: auto;
-    height: 150px;
-    padding: 20px;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    box-shadow: 0 0px 9px 2px #ccc;
+.ui-widget.ui-widget-content {
+    border: 1px solid rgba(216, 177, 90, 0.28);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 999px;
+    height: 8px;
 }
 
-.faces {
-    padding-right: 20px;
-    padding-bottom: 50px;
+.ui-slider .ui-slider-handle {
+    border-radius: 50%;
+    border: 2px solid rgba(216, 177, 90, 0.55);
+    background: #f2d187;
+    cursor: pointer;
 }
 
-#heatmap_images{
-    white-space: nowrap;
-    width: auto;
-    height: 200px;
-    padding: 20px;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    box-shadow: 0 0px 9px 2px #ccc;
-    margin-bottom: 20px;
+.ui-slider .ui-slider-range {
+    background: linear-gradient(90deg, #d8b15a 0%, #72c7ff 100%);
 }
 
-.heat-map {
-    padding-right: 20px;
-    padding-bottom: 50px;
+.progress-bar {
+    transition: width 0.7s ease;
 }
 
-/* span.spinner-border {
-    display: none;
-} */
+video {
+    width: 100%;
+}

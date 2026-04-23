@@ -1,79 +1,142 @@
 {% extends 'base.html' %}
-{%load static%}
-{%block content%}
-<!-- Live Stats Banner -->
-{% if stats.total > 0 %}
-<div class="container-fluid" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px 0; border-bottom: 3px solid #5a6fd8;">
-  <div class="container">
-    <div class="row g-4 align-items-center">
-      <div class="col-md-3">
-        <div class="text-center text-white">
-          <div style="font-size: 2.5em; font-weight: bold; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-            {{ stats.total }}
-          </div>
-          <small style="font-size: 0.95em; opacity: 0.95;">
-            <i class="fas fa-film me-1"></i>Total Analyzed
-          </small>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="text-center text-white">
-          <div style="font-size: 2.5em; font-weight: bold; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-            {{ stats.real }}
-          </div>
-          <small style="font-size: 0.95em; opacity: 0.95;">
-            <i class="fas fa-check-circle me-1"></i>Real Videos
-          </small>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="text-center text-white">
-          <div style="font-size: 2.5em; font-weight: bold; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-            {{ stats.fake }}
-          </div>
-          <small style="font-size: 0.95em; opacity: 0.95;">
-            <i class="fas fa-exclamation-circle me-1"></i>Deepfakes Found
-          </small>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="text-center text-white">
-          <div style="font-size: 2.5em; font-weight: bold; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-            {{ stats.avg_confidence }}%
-          </div>
-          <small style="font-size: 0.95em; opacity: 0.95;">
-            <i class="fas fa-chart-line me-1"></i>Avg Confidence
-          </small>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-{% endif %}
+{% load static %}
 
-<div class="container py-5">
-    <div class="row align-items-center justify-content-center min-vh-100">
-        <div class="col-lg-8 col-md-10 col-12">
-            <!-- Header Section -->
-            <div class="text-center mb-5">
-                <div class="mb-4">
-                    <img src="{% static 'images/logo1.png'%}" alt="Deepfake Detection AI" class="img-fluid" style="max-width: 120px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));">
-                </div>
-                <h1 class="display-4 fw-bold text-white mb-3">
-                    <i class="fas fa-shield-alt me-3"></i>Deepfake Detection AI
+{% block title %}DRISHTI Console{% endblock %}
+
+{% block content %}
+<section class="app-shell py-4 py-lg-5">
+    <div class="panel p-4 p-lg-5 mb-4 mb-lg-5">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-7">
+                <div class="eyebrow mb-3"><i class="fas fa-satellite-dish"></i> Highest win probability build</div>
+                <h1 style="font-size: clamp(2.4rem, 5vw, 4.8rem); line-height: 0.95; margin-bottom: 18px;">
+                    {{ mission.name }}
                 </h1>
-                <p class="lead text-white-50 mb-0">Advanced AI-powered deepfake detection technology</p>
+                <p style="font-size: 1.2rem; color: #f2f6f3; max-width: 760px; margin-bottom: 14px;">
+                    {{ mission.tagline }}
+                </p>
+                <p class="muted" style="max-width: 720px; margin-bottom: 26px;">
+                    During crisis windows like Operation Sindoor, India cannot rely on manual clip-by-clip review while adversaries pump out synthetic videos at scale.
+                    DRISHTI compresses detection, impersonation scoring, and fact-check escalation into one operator console.
+                </p>
+                <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+                    <a href="#intake" class="btn-drishti text-decoration-none">Launch Analyst Intake</a>
+                    <a href="{% url 'ml_app:about' %}" class="btn-ghost text-decoration-none">Read Mission Brief</a>
+                </div>
             </div>
+            <div class="col-lg-5">
+                <div class="panel-soft p-4 h-100">
+                    <div class="section-title">
+                        <h3>Threat snapshot</h3>
+                        <span class="status-pill elevated"><i class="fas fa-tower-broadcast"></i> Active demo</span>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="metric-card h-100">
+                                <div class="muted mb-2">Analysed clips</div>
+                                <div class="metric-value">{{ stats.total }}</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="metric-card h-100">
+                                <div class="muted mb-2">Synthetic hits</div>
+                                <div class="metric-value tone-critical">{{ stats.fake }}</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="metric-card h-100">
+                                <div class="muted mb-2">Avg confidence</div>
+                                <div class="metric-value">{{ stats.avg_confidence }}%</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="metric-card h-100">
+                                <div class="muted mb-2">High-risk rate</div>
+                                <div class="metric-value">{{ stats.fake_rate }}%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            <!-- Main Card -->
-            <div class="card border-0 shadow-lg rounded-4 overflow-hidden" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);">
-                <div class="card-body p-5">
-                    <!-- Video Preview -->
-                    <div class="mb-5">
-                        <h5 class="card-title fw-bold mb-3" style="color: #667eea;">
-                            <i class="fas fa-video me-2"></i>Video Preview
-                        </h5>
-                        <div class="ratio ratio-16x9 rounded-3 overflow-hidden" style="background: #f8f9fa;">
+    <div class="row g-4 mb-4 mb-lg-5">
+        {% for card in capability_cards %}
+        <div class="col-lg-4">
+            <div class="panel-soft p-4 h-100">
+                <div style="display: inline-grid; place-items: center; width: 54px; height: 54px; border-radius: 16px; background: rgba(216, 177, 90, 0.12); color: #efcb87; margin-bottom: 18px;">
+                    <i class="fas {{ card.icon }}"></i>
+                </div>
+                <h3 style="margin-bottom: 10px;">{{ card.title }}</h3>
+                <p class="muted mb-0">{{ card.summary }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-7" id="intake">
+            <div class="panel p-4 p-lg-5 h-100">
+                <div class="section-title">
+                    <div>
+                        <h2>Analyst intake</h2>
+                        <p class="muted mb-0">Upload a suspicious clip and let DRISHTI produce a fused threat verdict.</p>
+                    </div>
+                    <span class="status-pill low"><i class="fas fa-stopwatch"></i> Demo-ready</span>
+                </div>
+
+                <form class="form" method="POST" enctype="multipart/form-data" name="video-upload" id="video-upload">
+                    {% csrf_token %}
+
+                    <div class="panel-soft p-3 p-lg-4 mb-4">
+                        <label class="form-label fw-semibold mb-3">Suspicious media file</label>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text" style="background: rgba(216, 177, 90, 0.12); border: 1px solid rgba(216, 177, 90, 0.18); color: #efcb87;">
+                                <i class="fas fa-file-video"></i>
+                            </span>
+                            <input type="file" class="form-control" id="{{ form.upload_video_file.id_for_label }}" name="{{ form.upload_video_file.name }}" accept="video/*" required>
+                        </div>
+                        <div class="muted mt-2">Recommended demo names: include terms like `army`, `jaishankar`, `ispr`, or `sindoor` to simulate watchlist hits.</div>
+                        {% if form.upload_video_file.errors %}
+                            {% for each_error in form.upload_video_file.errors %}
+                            <div class="alert alert-danger mt-3 mb-0">{{ each_error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-lg-7">
+                            <div class="panel-soft p-3 p-lg-4 h-100">
+                                <label class="form-label fw-semibold mb-3">
+                                    Sequence length
+                                    <span class="status-pill elevated ms-2" id="slider-value">60 frames</span>
+                                </label>
+                                <div id="slider" class="w-100 mb-2"></div>
+                                <div class="muted">Higher frame counts produce better temporal evidence for lip-sync and motion consistency.</div>
+                                <input type="number" hidden id="{{ form.sequence_length.id_for_label }}" name="{{ form.sequence_length.name }}" value="60">
+                                {% if form.sequence_length.errors %}
+                                    {% for each_error in form.sequence_length.errors %}
+                                    <div class="alert alert-danger mt-3 mb-0">{{ each_error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="panel-soft p-3 p-lg-4 h-100">
+                                <div class="muted mb-2">Pipeline output</div>
+                                <ul class="mb-0 ps-3" style="color: var(--text);">
+                                    <li>Threat verdict</li>
+                                    <li>Watchlist match score</li>
+                                    <li>Weaponisation estimate</li>
+                                    <li>Fact-check recommendation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="ratio ratio-16x9 rounded-4 overflow-hidden" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);">
                             <video width="100%" controls id="videos" style="object-fit: cover;">
                                 <source src="" id="video_source">
                                 Your browser does not support HTML5 video.
@@ -81,129 +144,75 @@
                         </div>
                     </div>
 
-                    <!-- Upload Form -->
-                    <form class="form" method="POST" enctype="multipart/form-data" name="video-upload" id="video-upload">
-                        {%csrf_token%}
-                        
-                        <!-- File Upload -->
-                        <div class="form-group mb-4">
-                            <label class="form-label fw-bold mb-3" style="color: #333;">
-                                <i class="fas fa-cloud-upload-alt me-2" style="color: #667eea;"></i>Upload Video File
-                            </label>
-                            <div class="input-group input-group-lg rounded-3 overflow-hidden border-2" style="border-color: #e0e0e0;">
-                                <span class="input-group-text bg-light border-0" style="color: #667eea;">
-                                    <i class="fas fa-file-video"></i>
-                                </span>
-                                <input type="file" class="form-control border-0" id="{{form.upload_video_file.id_for_label}}" name="{{form.upload_video_file.name}}" accept="video/*" required>
-                            </div>
-                            <small class="d-block mt-2" style="color: #999;">Supported formats: MP4, AVI, WebM, MKV, FLV (Max 500MB)</small>
-                            {%if form.upload_video_file.errors%}
-                            {%for each_error in form.upload_video_file.errors%}
-                            <div class="alert alert-danger mt-2 mb-0 rounded-3">
-                                <i class="fas fa-exclamation-circle me-2"></i>{{each_error}}
-                            </div>
-                            {%endfor%}
-                            {%endif%}
-                        </div>
+                    <button id="videoUpload" type="submit" class="btn btn-drishti w-100">
+                        <i class="fas fa-crosshairs me-2"></i>Run DRISHTI analysis
+                    </button>
+                </form>
+            </div>
+        </div>
 
-                        <!-- Sequence Length Slider -->
-                        <div class="form-group mb-5">
-                            <label class="form-label fw-bold mb-3" style="color: #333;">
-                                <i class="fas fa-sliders-h me-2" style="color: #667eea;"></i>Sequence Length: <span class="badge bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)" id="slider-value">60</span>
-                            </label>
-                            <div id='slider' class="w-100"></div>
-                            <small class="d-block mt-2" style="color: #999;">Number of frames to analyze from the video</small>
-                            <input type="number" hidden="hidden" id="{{form.sequence_length.id_for_label}}" name="{{form.sequence_length.name}}" value="60"></input>
-                            {%if form.sequence_length.errors%}
-                            {%for each_error in form.sequence_length.errors%}
-                            <div class="alert alert-danger mt-2 mb-0 rounded-3">
-                                <i class="fas fa-exclamation-circle me-2"></i>{{each_error}}
-                            </div>
-                            {%endfor%}
-                            {%endif%}
-                        </div>
-
-                        <!-- Submit Button -->
-                        <button id="videoUpload" type="submit" class="btn btn-lg w-100 rounded-3 fw-bold text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 15px;">
-                            <i class="fas fa-magic me-2"></i>Analyze Video
-                        </button>
-                    </form>
-
-                    <!-- Info Cards -->
-                    <div class="row mt-5 pt-4 border-top">
-                        <div class="col-md-4 mb-3 mb-md-0">
-                            <div class="text-center p-3">
-                                <i class="fas fa-brain fa-2x mb-3" style="color: #667eea;"></i>
-                                <h6 class="fw-bold">AI Powered</h6>
-                                <small style="color: #999;">Advanced detection algorithms</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3 mb-md-0">
-                            <div class="text-center p-3">
-                                <i class="fas fa-bolt fa-2x mb-3" style="color: #764ba2;"></i>
-                                <h6 class="fw-bold">Fast Analysis</h6>
-                                <small style="color: #999;">Results in seconds</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="text-center p-3">
-                                <i class="fas fa-lock fa-2x mb-3" style="color: #667eea;"></i>
-                                <h6 class="fw-bold">Secure</h6>
-                                <small style="color: #999;">Your data is private</small>
-                            </div>
-                        </div>
+        <div class="col-xl-5">
+            <div class="panel p-4 p-lg-5 h-100">
+                <div class="section-title">
+                    <div>
+                        <h2>India-specific watchlists</h2>
+                        <p class="muted mb-0">Identity and context layers tuned for strategic misinformation narratives.</p>
                     </div>
                 </div>
+
+                <div class="mb-4">
+                    {% for entity in watchlist_entities %}
+                    <div class="panel-soft p-3 mb-3">
+                        <div style="display: flex; justify-content: space-between; gap: 16px; align-items: center;">
+                            <div>
+                                <strong>{{ entity.name }}</strong>
+                                <div class="muted">{{ entity.role }}</div>
+                            </div>
+                            <span class="status-pill elevated"><i class="fas fa-fingerprint"></i> Watch</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="section-title">
+                    <div>
+                        <h3>Event calendar</h3>
+                        <p class="muted mb-0">Narrative windows where false clips can travel fastest.</p>
+                    </div>
+                </div>
+                {% for event in event_watchlist %}
+                <div class="panel-soft p-3 mb-3">
+                    <div style="display: flex; justify-content: space-between; gap: 14px; align-items: start;">
+                        <div>
+                            <strong>{{ event.title }}</strong>
+                            <div class="muted">{{ event.detail }}</div>
+                        </div>
+                        <span class="status-pill {% if forloop.first %}critical{% else %}elevated{% endif %}">{{ event.window }}</span>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
-</div>
+</section>
+{% endblock %}
 
-<style>
-    .min-vh-100 {
-        min-height: 100vh;
-    }
-    .img-fluid {
-        transition: transform 0.3s ease;
-    }
-    .img-fluid:hover {
-        transform: scale(1.05);
-    }
-    #slider {
-        padding: 10px 0;
-    }
-    .form-control:focus, .input-group-text {
-        border-color: #667eea !important;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
-    }
-    .card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .card:hover {
-        transform: translateY(-5px);
-    }
-    button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-    }
-</style>
-{%endblock%}
-{%block js_cripts%}
-<script src="{%static 'js/script.js'%}"></script>
+{% block js_cripts %}
+<script src="{% static 'js/script.js' %}"></script>
 <script>
     $(function () {
-        var sliderSequenceNumbers = [10,20,40,60,80,100];
-        var slider = $("div#slider").slider({
+        var sliderSequenceNumbers = [10, 20, 40, 60, 80, 100];
+        $("div#slider").slider({
             value: 3,
             min: 0,
-            max: sliderSequenceNumbers.length-1,
+            max: sliderSequenceNumbers.length - 1,
             slide: function (event, ui) {
-                $('#{{form.sequence_length.id_for_label}}').val(sliderSequenceNumbers[ui.value]);
-                $('#slider-value').html(sliderSequenceNumbers[ui.value]);
+                $('#{{ form.sequence_length.id_for_label }}').val(sliderSequenceNumbers[ui.value]);
+                $('#slider-value').html(sliderSequenceNumbers[ui.value] + ' frames');
             }
         });
-        $("#{{form.sequence_length.id_for_label}}").val(sliderSequenceNumbers[$("#slider").slider("value")]);
-        $('#slider-value').html(sliderSequenceNumbers[$("#slider").slider("value")]);
+        $("#{{ form.sequence_length.id_for_label }}").val(sliderSequenceNumbers[$("#slider").slider("value")]);
+        $('#slider-value').html(sliderSequenceNumbers[$("#slider").slider("value")] + ' frames');
     });
 </script>
-{%endblock%}
+{% endblock %}

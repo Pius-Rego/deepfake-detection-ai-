@@ -1,54 +1,20 @@
-<nav class="navbar navbar-expand-lg navbar-light" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
-    <div class="container-fluid px-4">
-      <!-- Brand -->
-      <a class="navbar-brand fw-bold text-white" href="{% url 'ml_app:home' %}" style="font-size: 1.5em;">
-        <i class="fas fa-shield-alt me-2"></i>DeepFake Detector
-      </a>
+<nav style="position: sticky; top: 0; z-index: 40; backdrop-filter: blur(14px); background: rgba(6, 19, 26, 0.78); border-bottom: 1px solid rgba(255,255,255,0.07);">
+    <div class="app-shell" style="display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 16px 0;">
+        <a href="{% url 'ml_app:home' %}" style="display: inline-flex; align-items: center; gap: 14px; text-decoration: none;">
+            <span style="display: inline-grid; place-items: center; width: 46px; height: 46px; border-radius: 14px; background: linear-gradient(135deg, rgba(216, 177, 90, 0.2), rgba(114, 199, 255, 0.12)); border: 1px solid rgba(216, 177, 90, 0.24); color: #f2d187;">
+                <i class="fas fa-crosshairs"></i>
+            </span>
+            <span>
+                <span style="display: block; font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.08em;">DRISHTI</span>
+                <span class="muted" style="display: block; font-size: 0.84rem;">Military Deepfake Response Console</span>
+            </span>
+        </a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="border-color: rgba(255,255,255,0.3);">
-          <span class="navbar-toggler-icon" style="background-image: url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e\");"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto align-items-lg-center">
-              <li class="nav-item">
-                  <a class="nav-link text-white fw-bold" href="{% url 'ml_app:home' %}" style="transition: all 0.3s ease; padding-right: 1.5rem;">
-                      <i class="fas fa-home me-2"></i>Home
-                  </a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link text-white fw-bold" href="{% url 'ml_app:stats_page' %}" style="transition: all 0.3s ease; padding-right: 1.5rem;">
-                      <i class="fas fa-chart-bar me-2"></i>Stats
-                  </a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link text-white fw-bold" href="{% url 'ml_app:about' %}" style="transition: all 0.3s ease; padding-right: 1.5rem;">
-                      <i class="fas fa-info-circle me-2"></i>About
-                  </a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link text-white fw-bold" href="https://github.com" target="_blank" rel="noopener noreferrer" style="transition: all 0.3s ease;">
-                      <i class="fab fa-github me-2"></i>GitHub
-                  </a>
-              </li>
-          </ul>
-      </div>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px;">
+            <a href="{% url 'ml_app:home' %}" class="btn-ghost" style="padding: 10px 14px; text-decoration: none;">Console</a>
+            <a href="{% url 'ml_app:stats_page' %}" class="btn-ghost" style="padding: 10px 14px; text-decoration: none;">Ops Metrics</a>
+            <a href="{% url 'ml_app:about' %}" class="btn-ghost" style="padding: 10px 14px; text-decoration: none;">Mission Brief</a>
+            <a href="{% url 'ml_app:report_page' %}" class="btn-drishti" style="padding: 10px 14px; text-decoration: none;">Latest Report</a>
+        </div>
     </div>
 </nav>
-
-<style>
-  .navbar-nav .nav-link:hover {
-    color: rgba(255, 255, 255, 0.9) !important;
-    transform: translateY(-2px);
-  }
-  .navbar-brand:hover {
-    transform: scale(1.05);
-  }
-  @media (max-width: 991px) {
-    .navbar-nav .nav-link {
-      padding-top: 0.5rem !important;
-      padding-bottom: 0.5rem !important;
-    }
-  }
-</style>

@@ -1,277 +1,150 @@
 {% extends 'base.html' %}
-{% load static %}
-{%block content%}
-<div class="container-fluid py-5">
-  <div class="container">
-    <!-- Hero Section -->
-    <div class="text-center mb-5 pb-5">
-      <h1 class="display-3 fw-bold mb-4" style="color: #333;">
-        <i class="fas fa-shield-alt me-3" style="color: #667eea;"></i>About DeepFake Detection
-      </h1>
-      <p class="lead" style="color: #666; font-size: 1.3em; max-width: 700px; margin: 0 auto;">
-        Advanced AI technology to detect and identify artificially manipulated video content
-      </p>
+
+{% block title %}DRISHTI Mission Brief{% endblock %}
+
+{% block content %}
+<section class="app-shell py-4 py-lg-5">
+    <div class="panel p-4 p-lg-5 mb-4">
+        <div class="eyebrow mb-3"><i class="fas fa-scroll"></i> Mission brief</div>
+        <h1 style="font-size: clamp(2.2rem, 4.8vw, 4.6rem); margin-bottom: 14px;">{{ mission.name }} exists to close India’s synthetic warfare detection gap.</h1>
+        <p class="muted mb-0" style="max-width: 900px;">
+            {{ mission.problem }} This prototype translates a hackathon brief into a government-operator experience rather than a generic academic model demo.
+        </p>
     </div>
 
-    <!-- What is DeepFake Section -->
-    <div class="row mb-5 align-items-center">
-      <div class="col-lg-6 mb-4 mb-lg-0">
-        <div class="rounded-4 overflow-hidden shadow-lg" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 3px;">
-          <div style="background: white; padding: 40px; border-radius: 15px;">
-            <h2 class="h3 fw-bold mb-4" style="color: #333;">
-              <i class="fas fa-video me-2" style="color: #667eea;"></i>What is a DeepFake?
-            </h2>
-            <p class="mb-3" style="color: #555; line-height: 1.8;">
-              A deepfake is a synthetic media file (video, image, or audio) that has been manipulated or created using artificial intelligence techniques, particularly deep learning algorithms. These deepfakes can convincingly depict events or statements that never actually occurred.
-            </p>
-            <p class="mb-3" style="color: #555; line-height: 1.8;">
-              Deepfakes are created using advanced neural networks such as Generative Adversarial Networks (GANs) that can learn facial expressions, speech patterns, and movements from source material, then apply them to target videos.
-            </p>
-            <div class="alert alert-warning rounded-3" style="border: none; background: #fff3cd;">
-              <strong><i class="fas fa-exclamation-triangle me-2"></i>Risk:</strong> Deepfakes pose significant risks to privacy, security, and the spread of misinformation.
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="panel p-4 p-lg-5 h-100">
+                <div class="section-title">
+                    <div>
+                        <h2>Why now</h2>
+                        <p class="muted mb-0">Narrative control is won or lost in the first minutes of a synthetic clip.</p>
+                    </div>
+                </div>
+                <div class="panel-soft p-4 mb-3">
+                    <strong>Operation Sindoor proved the gap.</strong>
+                    <div class="muted mt-2">
+                        Manual review cannot keep pace when fake statements, surrender videos, or diplomatic “apology” clips are released in waves.
+                    </div>
+                </div>
+                <div class="panel-soft p-4 mb-3">
+                    <strong>Deepfake literacy is still low.</strong>
+                    <div class="muted mt-2">
+                        Detection must move upstream into institutions instead of expecting every citizen or journalist to self-verify perfectly.
+                    </div>
+                </div>
+                <div class="panel-soft p-4">
+                    <strong>Defence and public information teams need one surface.</strong>
+                    <div class="muted mt-2">
+                        DRISHTI combines model verdicts, identity matching, context scoring, and an analyst playbook in a single queue.
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="rounded-4 overflow-hidden shadow-lg p-4" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
-          <h3 class="h4 fw-bold mb-4">
-            <i class="fas fa-lightbulb me-2"></i>Common DeepFake Techniques
-          </h3>
-          <ul style="list-style: none; padding: 0;">
-            <li class="mb-3"><strong><i class="fas fa-check-circle me-2"></i>Face Swapping</strong> - Replacing one person's face with another's</li>
-            <li class="mb-3"><strong><i class="fas fa-check-circle me-2"></i>Face Reenactment</strong> - Controlling facial expressions and head movements</li>
-            <li class="mb-3"><strong><i class="fas fa-check-circle me-2"></i>Voice Synthesis</strong> - Creating artificial speech matching a person's voice</li>
-            <li class="mb-3"><strong><i class="fas fa-check-circle me-2"></i>Body Swapping</strong> - Replacing a person's entire body in a video</li>
-            <li><strong><i class="fas fa-check-circle me-2"></i>Lip Syncing</strong> - Manipulating lip movements to match different audio</li>
-          </ul>
+
+        <div class="col-lg-6">
+            <div class="panel p-4 p-lg-5 h-100">
+                <div class="section-title">
+                    <div>
+                        <h2>What judges see</h2>
+                        <p class="muted mb-0">A clear storyline from threat intake to government response.</p>
+                    </div>
+                </div>
+                {% for card in capability_cards %}
+                <div class="panel-soft p-4 mb-3">
+                    <div style="display: flex; gap: 14px; align-items: start;">
+                        <span class="status-pill elevated" style="min-width: 46px; justify-content: center;"><i class="fas {{ card.icon }}"></i></span>
+                        <div>
+                            <strong>{{ card.title }}</strong>
+                            <div class="muted mt-2">{{ card.summary }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
-      </div>
     </div>
 
-    <hr style="border: 2px dashed #ddd; margin: 4rem 0;">
-
-    <!-- Detection Technology Section -->
-    <div class="row mb-5 align-items-center">
-      <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
-        <div class="rounded-4 overflow-hidden shadow-lg" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 3px;">
-          <div style="background: white; padding: 40px; border-radius: 15px;">
-            <h2 class="h3 fw-bold mb-4" style="color: #333;">
-              <i class="fas fa-brain me-2" style="color: #667eea;"></i>Our Detection Approach
-            </h2>
-            <p class="mb-3" style="color: #555; line-height: 1.8;">
-              Our deepfake detection system uses a sophisticated combination of frame analysis and deep learning techniques to identify manipulated content.
-            </p>
-            
-            <div class="mb-4">
-              <h5 class="fw-bold" style="color: #333; margin-top: 20px; margin-bottom: 10px;">
-                <i class="fas fa-microscope me-2" style="color: #764ba2;"></i>Frame Variance Analysis
-              </h5>
-              <p class="mb-0" style="color: #666; font-size: 0.95em;">
-                Analyzes the Laplacian variance across video frames to detect compression artifacts and smoothing typical of AI-generated content.
-              </p>
+    <div class="row g-4 mb-4">
+        <div class="col-lg-5">
+            <div class="panel p-4 p-lg-5 h-100">
+                <div class="section-title">
+                    <div>
+                        <h2>Identity layer</h2>
+                        <p class="muted mb-0">Prioritised for public officials, military leadership, and adversarial information channels.</p>
+                    </div>
+                </div>
+                {% for entity in watchlist_entities %}
+                <div class="panel-soft p-3 mb-3">
+                    <strong>{{ entity.name }}</strong>
+                    <div class="muted">{{ entity.role }}</div>
+                </div>
+                {% endfor %}
             </div>
-
-            <div class="mb-4">
-              <h5 class="fw-bold" style="color: #333; margin-top: 20px; margin-bottom: 10px;">
-                <i class="fas fa-neural-network me-2" style="color: #764ba2;"></i>Deep Learning Models
-              </h5>
-              <p class="mb-0" style="color: #666; font-size: 0.95em;">
-                Leverages ResNeXt and LSTM neural networks for temporal and spatial feature extraction from video sequences.
-              </p>
-            </div>
-
-            <div class="mb-0">
-              <h5 class="fw-bold" style="color: #333; margin-top: 20px; margin-bottom: 10px;">
-                <i class="fas fa-face-smile me-2" style="color: #764ba2;"></i>Face Detection
-              </h5>
-              <p class="mb-0" style="color: #666; font-size: 0.95em;">
-                Detects and analyzes facial regions using advanced face recognition algorithms for anomaly detection.
-              </p>
-            </div>
-          </div>
         </div>
-      </div>
-      <div class="col-lg-6 order-lg-1">
+
+        <div class="col-lg-7">
+            <div class="panel p-4 p-lg-5 h-100">
+                <div class="section-title">
+                    <div>
+                        <h2>Operator workflow</h2>
+                        <p class="muted mb-0">Purpose-built for a PIB-style or defence media team, not a research lab dashboard.</p>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="metric-card h-100">
+                            <div class="muted mb-2">Step 1</div>
+                            <h3 style="font-size: 1.2rem;">Ingest suspicious clip</h3>
+                            <p class="muted mb-0">Upload incoming media from TV capture, X, WhatsApp, or Telegram.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="metric-card h-100">
+                            <div class="muted mb-2">Step 2</div>
+                            <h3 style="font-size: 1.2rem;">Fuse multimodal evidence</h3>
+                            <p class="muted mb-0">Deepfake, lip-sync, metadata, and OSINT layers roll up into one confidence score.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="metric-card h-100">
+                            <div class="muted mb-2">Step 3</div>
+                            <h3 style="font-size: 1.2rem;">Flag impersonation targets</h3>
+                            <p class="muted mb-0">Watchlist matching tells the operator who is being spoofed and how serious it is.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="metric-card h-100">
+                            <div class="muted mb-2">Step 4</div>
+                            <h3 style="font-size: 1.2rem;">Issue fact-check brief</h3>
+                            <p class="muted mb-0">Generate a report that can feed a rebuttal, archive trail, or command escalation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel p-4 p-lg-5">
+        <div class="section-title">
+            <div>
+                <h2>Conflict-aware event calendar</h2>
+                <p class="muted mb-0">These windows raise the weaponisation potential of otherwise ordinary-looking clips.</p>
+            </div>
+        </div>
         <div class="row g-3">
-          <div class="col-md-6">
-            <div class="card rounded-4 shadow-lg border-0 hover-lift h-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-              <div class="card-body text-center p-4">
-                <div class="display-6 mb-3"><i class="fas fa-video"></i></div>
-                <h5 class="card-title fw-bold">Video Analysis</h5>
-                <p class="card-text mb-0" style="font-size: 0.9em;">Frame-by-frame analysis of video content</p>
-              </div>
+            {% for event in event_watchlist %}
+            <div class="col-lg-4">
+                <div class="panel-soft p-4 h-100">
+                    <div style="display: flex; justify-content: space-between; gap: 12px; align-items: start; margin-bottom: 10px;">
+                        <strong>{{ event.title }}</strong>
+                        <span class="status-pill {% if forloop.first %}critical{% else %}elevated{% endif %}">{{ event.window }}</span>
+                    </div>
+                    <div class="muted">{{ event.detail }}</div>
+                </div>
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="card rounded-4 shadow-lg border-0 hover-lift h-100" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
-              <div class="card-body text-center p-4">
-                <div class="display-6 mb-3"><i class="fas fa-chart-line"></i></div>
-                <h5 class="card-title fw-bold">Confidence Score</h5>
-                <p class="card-text mb-0" style="font-size: 0.9em;">Probability scoring for accuracy</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="card rounded-4 shadow-lg border-0 hover-lift h-100" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
-              <div class="card-body text-center p-4">
-                <div class="display-6 mb-3"><i class="fas fa-shield-alt"></i></div>
-                <h5 class="card-title fw-bold">Real-time Detection</h5>
-                <p class="card-text mb-0" style="font-size: 0.9em;">Fast and reliable verification</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="card rounded-4 shadow-lg border-0 hover-lift h-100" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white;">
-              <div class="card-body text-center p-4">
-                <div class="display-6 mb-3"><i class="fas fa-lock"></i></div>
-                <h5 class="card-title fw-bold">Privacy Focused</h5>
-                <p class="card-text mb-0" style="font-size: 0.9em;">Your videos are processed securely</p>
-              </div>
-            </div>
-          </div>
+            {% endfor %}
         </div>
-      </div>
     </div>
-
-    <hr style="border: 2px dashed #ddd; margin: 4rem 0;">
-
-    <!-- Why This Matters Section -->
-    <div class="row mb-5">
-      <div class="col-12">
-        <h2 class="h2 fw-bold text-center mb-5" style="color: #333;">
-          <i class="fas fa-exclamation-circle me-3" style="color: #f5576c;"></i>Why Deepfake Detection Matters
-        </h2>
-      </div>
-      <div class="col-md-6 mb-4">
-        <div class="card rounded-4 shadow-lg border-0 h-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 3px;">
-          <div style="background: white; padding: 30px; border-radius: 14px;">
-            <h5 class="fw-bold mb-3" style="color: #333;">
-              <i class="fas fa-user-shield me-2" style="color: #667eea;"></i>Privacy Protection
-            </h5>
-            <p style="color: #555; line-height: 1.7;">
-              Deepfakes can be used to create non-consensual intimate content or impersonate individuals, violating personal privacy and dignity. Early detection helps protect vulnerable individuals.
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 mb-4">
-        <div class="card rounded-4 shadow-lg border-0 h-100" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 3px;">
-          <div style="background: white; padding: 30px; border-radius: 14px;">
-            <h5 class="fw-bold mb-3" style="color: #333;">
-              <i class="fas fa-newspaper me-2" style="color: #f5576c;"></i>Combating Misinformation
-            </h5>
-            <p style="color: #555; line-height: 1.7;">
-              Deepfakes can spread false information at scale, influencing public opinion and elections. Detection tools help verify content authenticity and combat propaganda.
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 mb-4">
-        <div class="card rounded-4 shadow-lg border-0 h-100" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 3px;">
-          <div style="background: white; padding: 30px; border-radius: 14px;">
-            <h5 class="fw-bold mb-3" style="color: #333;">
-              <i class="fas fa-landmark me-2" style="color: #00f2fe;"></i>Legal & Security
-            </h5>
-            <p style="color: #555; line-height: 1.7;">
-              Organizations need robust detection systems to identify deepfakes in security contexts, legal proceedings, and identity verification processes.
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 mb-4">
-        <div class="card rounded-4 shadow-lg border-0 h-100" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 3px;">
-          <div style="background: white; padding: 30px; border-radius: 14px;">
-            <h5 class="fw-bold mb-3" style="color: #333;">
-              <i class="fas fa-brain me-2" style="color: #38f9d7;"></i>Public Trust
-            </h5>
-            <p style="color: #555; line-height: 1.7;">
-              As deepfake technology advances, society needs reliable detection tools to maintain trust in digital media and institutions.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <hr style="border: 2px dashed #ddd; margin: 4rem 0;">
-
-    <!-- Statistics Section -->
-    <div class="row mb-5">
-      <div class="col-12 text-center mb-5">
-        <h2 class="h2 fw-bold" style="color: #333;">
-          <i class="fas fa-chart-bar me-3" style="color: #667eea;"></i>The State of Deepfakes
-        </h2>
-      </div>
-      <div class="col-md-6 col-lg-3 mb-4">
-        <div class="card rounded-4 shadow-lg border-0 text-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-          <div class="card-body p-4">
-            <div class="display-5 fw-bold mb-2">94%</div>
-            <p class="card-text mb-0">of deepfakes are pornographic in nature</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-3 mb-4">
-        <div class="card rounded-4 shadow-lg border-0 text-center" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
-          <div class="card-body p-4">
-            <div class="display-5 fw-bold mb-2">96%</div>
-            <p class="card-text mb-0">of victims are women</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-3 mb-4">
-        <div class="card rounded-4 shadow-lg border-0 text-center" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
-          <div class="card-body p-4">
-            <div class="display-5 fw-bold mb-2">3x</div>
-            <p class="card-text mb-0">increase in deepfakes annually</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-3 mb-4">
-        <div class="card rounded-4 shadow-lg border-0 text-center" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white;">
-          <div class="card-body p-4">
-            <div class="display-5 fw-bold mb-2">$0.12</div>
-            <p class="card-text mb-0">average cost per deepfake creation</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <hr style="border: 2px dashed #ddd; margin: 4rem 0;">
-
-    <!-- CTA Section -->
-    <div class="row mb-5">
-      <div class="col-12">
-        <div class="rounded-4 p-5 text-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-          <h2 class="h2 fw-bold mb-4">
-            <i class="fas fa-shield-alt me-3"></i>Ready to Verify Content?
-          </h2>
-          <p class="lead mb-4">Upload your video and get instant deepfake detection results</p>
-          <a href="{% url 'ml_app:home' %}" class="btn btn-lg rounded-3 px-5" style="background: white; color: #667eea; border: none; font-weight: bold;">
-            <i class="fas fa-video me-2"></i>Start Analyzing Now
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<style>
-  .hover-lift {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  .hover-lift:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2) !important;
-  }
-  .card {
-    transition: all 0.3s ease;
-  }
-  .card:hover {
-    transform: translateY(-5px);
-  }
-  hr {
-    margin: 3rem 0;
-  }
-</style>
-
-{%endblock%}
+</section>
+{% endblock %}

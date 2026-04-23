@@ -1,1 +1,16 @@
-$(document).on("change", "#id_upload_video_file", function(evt) {var $source = $('#video_source');$source[0].src = URL.createObjectURL(this.files[0]);$source.parent()[0].load();$('#videos').css("display", "block");$('#id_upload_video_file').css("display", "none");});$('form').on('submit', function(e){$('#videoUpload').prop("disabled", true);$('#videoUpload').html('Uploading Video&nbsp;<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="sr-only">Loading...</span>');});
+$(document).on("change", "#id_upload_video_file", function () {
+    var source = $("#video_source");
+    if (!this.files || !this.files[0]) {
+        return;
+    }
+
+    source[0].src = URL.createObjectURL(this.files[0]);
+    source.parent()[0].load();
+    $("#videos").css("display", "block");
+});
+
+$("form").on("submit", function () {
+    $("#videoUpload")
+        .prop("disabled", true)
+        .html('Running DRISHTI analysis&nbsp;<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+});
